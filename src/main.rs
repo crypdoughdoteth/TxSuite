@@ -1,8 +1,9 @@
 mod rpc;
-mod routes; 
+mod routes;
+mod tls;
 use axum::{
     routing::get,
-    Router,
+    Router
 };
 use tracing_subscriber::fmt::format::FmtSpan;
 use routes::router::rpc_router; 
@@ -24,7 +25,6 @@ async fn main() {
         // in the response, I will return BAD_REQUEST, since that's what it is. 
         // Fuck the standard. 
         .route("/rpc/v1", get(rpc_router));
-
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap(); 
     info!("TxSuite is running on port 3000");

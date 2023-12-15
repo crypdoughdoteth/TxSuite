@@ -41,11 +41,11 @@ pub enum JsonRpcResult {
     SponsoredTxResult(String)
 }
 
-type AsyncFn = Box<dyn FnOnce(SponsoredTxArgs, u32) -> Pin<Box<dyn Future<Output = Result<JsonRpcResponse, JsonRpcError>> + Send>> + Send>;
+type AsyncFn<T> = Box<dyn FnOnce(T, u32) -> Pin<Box<dyn Future<Output = Result<JsonRpcResponse, JsonRpcError>> + Send>> + Send>;
 
 pub enum Methods {    
     SponsoredTx{
-        call: AsyncFn,  
+        call: AsyncFn<SponsoredTxArgs>,  
     },
 }
 
@@ -66,7 +66,6 @@ impl JsonRpcError {
             code, 
             message, 
             data,
-            
         }
     }
 }
@@ -75,8 +74,8 @@ impl IntoResponse for JsonRpcError {
     fn into_response(self) -> Response {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
-            JsonRpcError::new(-32603, "Internal Error".to_owned(), Some(json!(self.data)))
-        )
+            self
+            )
             .into_response()
     }
 }
@@ -88,5 +87,31 @@ impl IntoResponse for JsonRpcResponse {
             self
         )
             .into_response()
+    }
+}
+
+impl From<Box<(dyn std::error::Error + 'static)>> for JsonRpcError {
+    fn from(err: Box<dyn std::error::Error + 'static>) -> Self {
+       JsonRpcError::new(-32603, "Internal Error".to_owned(), Some(json!(err.to_string())))
+    }
+
+}
+
+impl From<sui_sdk::error::Error> for JsonRpcError {
+    fn from(err: sui_sdk::error::Error) -> Self {
+        JsonRpcError::new(-32603, "Internal Error".to_owned(), Some(json!(err.to_string())))
+    }
+}
+
+impl From<anyhow::Error> for JsonRpcError {
+    fn from(err: anyhow::Error) -> Self {
+        JsonRpcError::new(-32603, "Internal Error".to_owned(), Some(json!(err.to_string())))
+    }
+
+}
+
+impl From<serde_json::Error> for JsonRpcError {
+    fn from(err: serde_json::Error) -> Self {
+        JsonRpcError::new(-32603, "Internal Error".to_owned(), Some(json!(err.to_string())))
     }
 }

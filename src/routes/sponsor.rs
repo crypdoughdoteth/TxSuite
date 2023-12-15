@@ -1,6 +1,5 @@
 use crate::rpc::types::{JsonRpcResponse, JsonRpcResult, JsonRpcError};
 use crate::routes::types::SponsoredTxArgs;
-use serde_json::json;
 use sui_types::{crypto::Signature, transaction::Transaction, quorum_driver_types::ExecuteTransactionRequestType}; 
 use sui_keys::keypair_file::read_keypair_from_file;
 use shared_crypto::intent::{Intent, IntentMessage};
@@ -8,12 +7,12 @@ use sui_types::signature::GenericSignature;
 use sui_sdk::{SuiClientBuilder, rpc_types::SuiTransactionBlockResponseOptions};
 use tracing::{info, debug};
 
-#[tracing::instrument(ret)]
+#[tracing::instrument]
 pub async fn sponsor_tx(body: SponsoredTxArgs, id: u32) -> Result<JsonRpcResponse, JsonRpcError> {
     info!("Sponsored tx pending ... ");
     debug!("sponsoring tx: {:?}", &body);
-    let devnet = SuiClientBuilder::default().build_devnet().await.map_err(|e| JsonRpcError::new(-32603, "Internal error".to_owned(), Some(json!(e.to_string()))))?;
-    let key = read_keypair_from_file("../../../../testing/sponsoredtx/keys/alice.key").map_err(|e| JsonRpcError::new(-32603, "Internal error".to_owned(), Some(json!(e.to_string()))))?; 
+    let devnet = SuiClientBuilder::default().build_devnet().await?;
+    let key = read_keypair_from_file("../../../../testing/sponsoredtx/keys/alice.key")?;
     let intent = Intent::sui_transaction();
     let td = body.tx_data;
     let customer_signature = body.signature;
@@ -23,7 +22,7 @@ pub async fn sponsor_tx(body: SponsoredTxArgs, id: u32) -> Result<JsonRpcRespons
     devnet.quorum_driver_api()
         .execute_transaction_block(tx, SuiTransactionBlockResponseOptions::full_content(), 
             Some(ExecuteTransactionRequestType::WaitForLocalExecution))
-        .await.map_err(|e| JsonRpcError::new(-32603, "Internal error".to_owned(), Some(json!(e.to_string()))))?;
+        .await?;
     info!("Sponsored tx successful!");
     Ok(JsonRpcResponse::new(Some(JsonRpcResult::SponsoredTxResult("Nice".to_owned())), None, id)) 
 }
