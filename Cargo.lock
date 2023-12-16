@@ -153,7 +153,7 @@ dependencies = [
  "rcgen",
  "ring 0.16.20",
  "rustls 0.21.10",
- "rustls-webpki 0.101.7",
+ "rustls-webpki",
  "serde",
  "serde_json",
  "socket2 0.5.5",
@@ -2364,7 +2364,7 @@ dependencies = [
  "once_cell",
  "regex",
  "reqwest",
- "rustls-webpki 0.101.7",
+ "rustls-webpki",
  "schemars",
  "serde",
  "serde_json",
@@ -2473,6 +2473,21 @@ name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
+
+[[package]]
+name = "foreign-types"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f6f339eb8adc052cd2ca78910fda869aefa38d22d5cb648e6485e4d3fc06f3b1"
+dependencies = [
+ "foreign-types-shared",
+]
+
+[[package]]
+name = "foreign-types-shared"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 
 [[package]]
 name = "form_urlencoded"
@@ -3032,6 +3047,7 @@ dependencies = [
  "itoa",
  "pin-project-lite",
  "tokio",
+ "want",
 ]
 
 [[package]]
@@ -5267,10 +5283,48 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
+name = "openssl"
+version = "0.10.61"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6b8419dc8cc6d866deb801274bba2e6f8f6108c1bb7fcc10ee5ab864931dbb45"
+dependencies = [
+ "bitflags 2.4.1",
+ "cfg-if",
+ "foreign-types",
+ "libc",
+ "once_cell",
+ "openssl-macros",
+ "openssl-sys",
+]
+
+[[package]]
+name = "openssl-macros"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
+dependencies = [
+ "proc-macro2 1.0.70",
+ "quote 1.0.33",
+ "syn 2.0.39",
+]
+
+[[package]]
 name = "openssl-probe"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
+
+[[package]]
+name = "openssl-sys"
+version = "0.9.97"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3eaad34cdd97d81de97964fc7f29e2d104f483840d906ef56daa1912338460b"
+dependencies = [
+ "cc",
+ "libc",
+ "pkg-config",
+ "vcpkg",
+]
 
 [[package]]
 name = "opentelemetry"
@@ -6649,22 +6703,8 @@ checksum = "f9d5a6813c0759e4609cd494e8e725babae6a2ca7b62a5536a13daaec6fcb7ba"
 dependencies = [
  "log",
  "ring 0.17.7",
- "rustls-webpki 0.101.7",
+ "rustls-webpki",
  "sct",
-]
-
-[[package]]
-name = "rustls"
-version = "0.22.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe6b63262c9fcac8659abfaa96cac103d28166d3ff3eaf8f412e19f3ae9e5a48"
-dependencies = [
- "log",
- "ring 0.17.7",
- "rustls-pki-types",
- "rustls-webpki 0.102.0",
- "subtle",
- "zeroize",
 ]
 
 [[package]]
@@ -6689,29 +6729,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustls-pki-types"
-version = "1.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7673e0aa20ee4937c6aacfc12bb8341cfbf054cdd21df6bec5fd0629fe9339b"
-
-[[package]]
 name = "rustls-webpki"
 version = "0.101.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b6275d1ee7a1cd780b64aca7726599a1dbc893b1e64144529e55c3c2f745765"
 dependencies = [
  "ring 0.17.7",
- "untrusted 0.9.0",
-]
-
-[[package]]
-name = "rustls-webpki"
-version = "0.102.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de2635c8bc2b88d367767c5de8ea1d8db9af3f6219eba28442242d9ab81d1b89"
-dependencies = [
- "ring 0.17.7",
- "rustls-pki-types",
  "untrusted 0.9.0",
 ]
 
@@ -8704,6 +8727,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "tokio-openssl"
+version = "0.6.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ffab79df67727f6acf57f1ff743091873c24c579b1e2ce4d8f53e47ded4d63d"
+dependencies = [
+ "futures-util",
+ "openssl",
+ "openssl-sys",
+ "tokio",
+]
+
+[[package]]
 name = "tokio-retry"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -9122,7 +9157,10 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum 0.7.2",
- "rustls 0.22.1",
+ "futures-util",
+ "hyper 1.0.1",
+ "hyper-util",
+ "openssl",
  "serde",
  "serde_json",
  "shared-crypto",
@@ -9130,7 +9168,9 @@ dependencies = [
  "sui-sdk",
  "sui-types",
  "tokio",
+ "tokio-openssl",
  "tower",
+ "tower-service",
  "tracing",
  "tracing-subscriber",
 ]

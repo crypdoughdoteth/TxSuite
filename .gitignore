@@ -1,2 +1,3 @@
 /target
 ~/.config/nvim-data/undodir/
+/self_signed_certs

@@ -9,14 +9,19 @@ edition = "2021"
 axum = {version = "0.7", features = ["macros"]}
 serde = {version = "1.0.193", features = ["derive"]}
 serde_json = "1.0.108"
+futures-util = {version = "0.3", default-features = false, features = ["alloc"]} 
 tokio = {version = "1.35.0", features = ["full"]}
-tower = "0.4.13"
+tower = {version = "0.4.13", features = ["make"]}
+tower-service = "0.3.2"
+tokio-openssl = "0.6"
+hyper = {version = "1.0.0", features = ["full"]}
+hyper-util = {version = "0.1", features = ["full"]}
+openssl = "0.10"
 tracing = "0.1"
 tracing-subscriber = "0.3.18"
 sui-types = { git = "https://github.com/mystenlabs/sui", package = "sui-types"}
 shared-crypto = { git = "https://github.com/mystenlabs/sui", package = "shared-crypto"}
 sui-keys = { git = "https://github.com/mystenlabs/sui", package = "sui-keys"}
 sui-sdk = { git = "https://github.com/mystenlabs/sui", package = "sui-sdk"}
-rustls = "0.22.1"
 anyhow = "1.0.75"
 

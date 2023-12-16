@@ -6,4 +6,3 @@ pub struct SponsoredTxArgs {
     pub signature: Signature,
     pub tx_data: TransactionData,
 }
-
