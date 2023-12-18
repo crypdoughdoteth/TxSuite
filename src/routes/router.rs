@@ -1,12 +1,9 @@
 use super::types::SponsoredTxArgs;
 use crate::rpc::types::{JsonRpcError, JsonRpcRequest, JsonRpcResponse, Methods};
 use axum::Json;
-use serde_json::{json, Value};
+use serde_json::Value;
 use tracing::log::info;
-use axum::debug_handler;
 
-#[debug_handler]
-#[tracing::instrument]
 pub async fn rpc_router(
     Json(payload): Json<JsonRpcRequest>,
 ) -> Result<Json<JsonRpcResponse>, JsonRpcError> {
@@ -20,13 +17,8 @@ pub async fn rpc_router(
             let arg = serde_json::from_value::<SponsoredTxArgs>(a)?;
             Ok(Json(call(arg, id).await?))
         }
-        (Err(e), _) => {
-            Err(JsonRpcError::new(
-                -32601,
-                String::from("The method does not exist / is not available"),
-                Some(json!(e.to_string())),
-            )) 
-        }
+        (Err(e), _) => Err(e),
+
         (_, _) => {
             Err(JsonRpcError::new(-32600, "Invalid Request".to_owned(), None))
         }

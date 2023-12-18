@@ -9,10 +9,8 @@ use tracing::{info, debug};
 
 #[tracing::instrument]
 pub async fn sponsor_tx(body: SponsoredTxArgs, id: u32) -> Result<JsonRpcResponse, JsonRpcError> {
-    info!("Sponsored tx pending ... ");
-    debug!("sponsoring tx: {:?}", &body);
-    let devnet = SuiClientBuilder::default().build_devnet().await?;
-    let key = read_keypair_from_file("../../../../testing/sponsoredtx/keys/alice.key")?;
+    let devnet = SuiClientBuilder::default().build_devnet().await?; 
+    let key = read_keypair_from_file("../../testing/sponsoredtx/keys/alice.key")?;
     let intent = Intent::sui_transaction();
     let td = body.tx_data;
     let customer_signature = body.signature;
@@ -23,7 +21,6 @@ pub async fn sponsor_tx(body: SponsoredTxArgs, id: u32) -> Result<JsonRpcRespons
         .execute_transaction_block(tx, SuiTransactionBlockResponseOptions::full_content(), 
             Some(ExecuteTransactionRequestType::WaitForLocalExecution))
         .await?;
-    info!("Sponsored tx successful!");
     Ok(JsonRpcResponse::new(Some(JsonRpcResult::SponsoredTxResult("Nice".to_owned())), None, id)) 
 }
 
