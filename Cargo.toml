@@ -7,21 +7,20 @@ edition = "2021"
 
 [dependencies]
 axum = "0.7"
-serde = {version = "1.0.193", features = ["derive"]}
+serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"
-futures-util = {version = "0.3", default-features = false, features = ["alloc"]} 
 tokio = {version = "1.35.0", features = ["full"]}
-tower = {version = "0.4.13", features = ["make"]}
-tower-service = "0.3.2"
-tokio-openssl = "0.6"
-hyper = {version = "1.0.0", features = ["full"]}
-hyper-util = {version = "0.1", features = ["full"]}
-openssl = "0.10"
 tracing = "0.1"
 tracing-subscriber = "0.3.18"
 sui-types = { git = "https://github.com/mystenlabs/sui", package = "sui-types"}
 shared-crypto = { git = "https://github.com/mystenlabs/sui", package = "shared-crypto"}
 sui-keys = { git = "https://github.com/mystenlabs/sui", package = "sui-keys"}
 sui-sdk = { git = "https://github.com/mystenlabs/sui", package = "sui-sdk"}
+sqlx = {version = "0.7.3", features = ["mysql", "macros", "runtime-tokio", "tls-rustls"]}
+dotenvy = "0.15.7"
 anyhow = "1.0.75"
+argon2 = "0.5.2"
 
+
+[dev-dependencies]
+reqwest = {version = "0.11.23", features = ["json"]}
